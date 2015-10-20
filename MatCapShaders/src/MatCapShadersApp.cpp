@@ -13,18 +13,18 @@ using namespace std;
 
 class MatCapShadersApp : public App {
   public:
-	void setup() override;
-	void mouseDown(MouseEvent event) override;
-	void keyDown(KeyEvent event) override;
-	void update() override;
-	void draw() override;
+    void setup() override;
+    void mouseDown(MouseEvent event) override;
+    void keyDown(KeyEvent event) override;
+    void update() override;
+    void draw() override;
 
   private:
     void setupCamera();
     void setupBatches();
-	void setupTextures();
-	void nextTexture();
-	void prevTexture();
+    void setupTextures();
+    void nextTexture();
+    void prevTexture();
 
     // camera
     CameraPersp mCamera;
@@ -36,26 +36,26 @@ class MatCapShadersApp : public App {
     vec3        mCamTarget;
     vec3        mCamUp;
 
-	// obj file batch
-	TriMesh          mTriMesh;
-	gl::BatchRef     mObjRef;
-	gl::GlslProgRef  mMatcapGlsl;
+    // obj file batch
+    TriMesh          mTriMesh;
+    gl::BatchRef     mObjRef;
+    gl::GlslProgRef  mMatcapGlsl;
 
-	// wireframe grid batch
-	geom::WirePlane  mGrid;
-	gl::GlslProgRef  mGridGlsl;
-	gl::BatchRef     mGridRef;
+    // wireframe grid batch
+    geom::WirePlane  mGrid;
+    gl::GlslProgRef  mGridGlsl;
+    gl::BatchRef     mGridRef;
 
-	// matcap textures
-	gl::Texture2dRef mMatcapTex;
-	vector<fs::path> mMatcapPaths;
-	vector<fs::path>::iterator mCurrentPath;
+    // matcap textures
+    gl::Texture2dRef mMatcapTex;
+    vector<fs::path> mMatcapPaths;
+    vector<fs::path>::iterator mCurrentPath;
 };
 
 void MatCapShadersApp::setup()
 {
     setupCamera();
-	setupTextures();
+    setupTextures();
     setupBatches();
 }
 
@@ -80,8 +80,8 @@ void MatCapShadersApp::setupBatches()
     {
         mMatcapGlsl = gl::GlslProg::create(loadAsset("shaders/matcap_vert.glsl"),
                                            loadAsset("shaders/matcap_frag.glsl"));
-		mGridGlsl = gl::GlslProg::create(loadAsset("shaders/pass_thru_vert.glsl"),
-			                             loadAsset("shaders/pass_thru_frag.glsl"));
+        mGridGlsl = gl::GlslProg::create(loadAsset("shaders/pass_thru_vert.glsl"),
+                                         loadAsset("shaders/pass_thru_frag.glsl"));
     }
     catch (gl::GlslProgCompileExc e)
     {
@@ -93,60 +93,60 @@ void MatCapShadersApp::setupBatches()
     mTriMesh = TriMesh(loader);
     mObjRef = gl::Batch::create(mTriMesh, mMatcapGlsl);
 
-	mGrid = geom::WirePlane().subdivisions(ivec2(10, 10)).size(vec2(2, 2));
-	mGridRef = gl::Batch::create(mGrid, mGridGlsl);
+    mGrid = geom::WirePlane().subdivisions(ivec2(10, 10)).size(vec2(2, 2));
+    mGridRef = gl::Batch::create(mGrid, mGridGlsl);
 }
 
 void MatCapShadersApp::setupTextures()
 {
-	// search assets for all .png files in sub directory /matcaps
-	for (auto& p : fs::directory_iterator(getAssetPath("matcaps")))
-	{
-		if (!fs::is_regular_file(p))
-			continue;
+    // search assets for all .png files in sub directory /matcaps
+    for (auto& p : fs::directory_iterator(getAssetPath("matcaps")))
+    {
+        if (!fs::is_regular_file(p))
+            continue;
 
-		if (p.path().extension().string().compare("png"))
-				mMatcapPaths.push_back(p.path());
-	}
+        if (p.path().extension().string().compare("png"))
+                mMatcapPaths.push_back(p.path());
+    }
 
-	mCurrentPath = mMatcapPaths.begin();
-	mMatcapTex = gl::Texture2d::create(loadImage(*mCurrentPath));
+    mCurrentPath = mMatcapPaths.begin();
+    mMatcapTex = gl::Texture2d::create(loadImage(*mCurrentPath));
 }
 
 void MatCapShadersApp::nextTexture()
 {
-	if (mMatcapPaths.size() > 1) {
+    if (mMatcapPaths.size() > 1) {
 
-		mCurrentPath++;
-		if (mCurrentPath == mMatcapPaths.end())
-			mCurrentPath = mMatcapPaths.begin();
+        mCurrentPath++;
+        if (mCurrentPath == mMatcapPaths.end())
+            mCurrentPath = mMatcapPaths.begin();
 
-		try {
-			mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
-		}
-		catch (cinder::Exception e) {
-			console() << e.what() << std::endl;
-			quit();
-		}
-	}
+        try {
+            mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
+        }
+        catch (cinder::Exception e) {
+            console() << e.what() << std::endl;
+            quit();
+        }
+    }
 }
 
 void MatCapShadersApp::prevTexture()
 {
-	if (mMatcapPaths.size() > 1) {
+    if (mMatcapPaths.size() > 1) {
 
-		if (mCurrentPath == mMatcapPaths.begin())
-			mCurrentPath = mMatcapPaths.end();
-		mCurrentPath--;
+        if (mCurrentPath == mMatcapPaths.begin())
+            mCurrentPath = mMatcapPaths.end();
+        mCurrentPath--;
 
-		try {
-			mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
-		}
-		catch (cinder::Exception e) {
-			console() << e.what() << std::endl;
-			quit();
-		}
-	}
+        try {
+            mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
+        }
+        catch (cinder::Exception e) {
+            console() << e.what() << std::endl;
+            quit();
+        }
+    }
 }
 
 void MatCapShadersApp::mouseDown( MouseEvent event )
@@ -155,10 +155,10 @@ void MatCapShadersApp::mouseDown( MouseEvent event )
 
 void MatCapShadersApp::keyDown( KeyEvent event )
 {
-	if (event.getChar() == 'x')
-		nextTexture();
-	else if (event.getChar() == 'z')
-		prevTexture();
+    if (event.getChar() == 'x')
+        nextTexture();
+    else if (event.getChar() == 'z')
+        prevTexture();
 }
 
 void MatCapShadersApp::update()
@@ -167,17 +167,17 @@ void MatCapShadersApp::update()
 
 void MatCapShadersApp::draw()
 {
-	gl::enableDepthRead();
-	gl::enableDepthWrite();
+    gl::enableDepthRead();
+    gl::enableDepthWrite();
 
     gl::clear(Color::black());
     gl::color(1, 1, 1, 1);
 
     gl::setMatrices(mCamera);
 
-	gl::ScopedTextureBind sTex(mMatcapTex);
+    gl::ScopedTextureBind sTex(mMatcapTex);
 
-	mGridRef->draw();
+    mGridRef->draw();
     mObjRef->draw();
 }
 
@@ -185,5 +185,5 @@ CINDER_APP( MatCapShadersApp, RendererGl(RendererGl::Options().msaa(16)), [](App
     settings->setMultiTouchEnabled(false);
     settings->setHighDensityDisplayEnabled(true);
     settings->setWindowSize(1280, 720);
-	settings->setTitle("MatCapShaders - Z and X keys toggle matcaps");
+    settings->setTitle("MatCapShaders - Z and X keys toggle matcaps");
     })
