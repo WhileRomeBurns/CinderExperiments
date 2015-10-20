@@ -33,3 +33,7 @@ ipch/
 [Bb]in/
 [Dd]ebug*/
 [Rr]elease*/
+
+*.sdf
+*.opensdf
+*.user
