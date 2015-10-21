@@ -122,7 +122,7 @@ void MatCapShadersApp::nextTexture()
             mCurrentPath = mMatcapPaths.begin();
 
         try {
-            mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
+            mMatcapTex = gl::Texture2d::create(loadImage(*mCurrentPath));
         }
         catch (cinder::Exception e) {
             console() << e.what() << std::endl;
@@ -140,7 +140,7 @@ void MatCapShadersApp::prevTexture()
         mCurrentPath--;
 
         try {
-            mMatcapTex->update(Surface(loadImage(*mCurrentPath)));
+            mMatcapTex = gl::Texture2d::create(loadImage(*mCurrentPath));
         }
         catch (cinder::Exception e) {
             console() << e.what() << std::endl;
