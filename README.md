@@ -7,6 +7,8 @@ Adopted from [here](http://www.clicktorelease.com/blog/creating-spherical-enviro
 
 To swap textures forward and back use the Z and X keys. 150 samples from blender are included in [assets/matcaps](MatCapShaders/assets/matcaps).
 
+Thanks to [Paul Houx](https://github.com/paulhoux) for refactoring the frag shader and catching a texture load bug.
+
 ### License (MIT)
 
 **Copyright © 2015 Shawn Lipowski**
