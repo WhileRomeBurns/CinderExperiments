@@ -9,9 +9,9 @@ out vec4 fragColor;
 
 void main()
 {
-    vec3  r = reflect( cI, cN );
-    float m = 2.0 * sqrt( pow( r.x, 2.0 ) + pow( r.y, 2.0 ) + pow( r.z + 1., 2.0 ) );
-    vec2 vN = r.xy / m + 0.5;
+	vec3 r = reflect( cI, cN );  r.z += 1.0;
+	float m = 0.5 * inversesqrt( dot( r, r ) );
+	vec2 uv = r.xy * m + 0.5;
 
-    fragColor = vec4( texture2D( image, vN ).rgb, 1.0 );
+	fragColor = vec4( texture( image, uv ).rgb, 1.0 );
 }
